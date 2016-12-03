@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.me/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>PostgreSQL CSV 取り込み upsert | odekakeshimasyo.me</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="postgresql-csv-取り込み-upsert">PostgreSQL CSV 取り込み upsert</h1>
+
+<h2 id="copy文copyコマンド">COPY文、\COPYコマンド</h2>
+
+<p>違いはCSVファイルの場所がサーバかローカルかだけ。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">COPY table1 FROM '/path/to/table1.csv' WITH CSV;
+
+\COPY table1 FROM '/path/to/table1.csv' WITH CSV;</code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">COPY table1(id, value) FROM '/path/to/table1.csv' WITH CSV;
+
+\COPY table1(id, value) FROM '/path/to/table1.csv' WITH CSV;</code></pre>
+
+
+
+<h2 id="csvデータでupsertする">CSVデータでupsertする</h2>
+
+<p>table1に既にデータがあるとき、id重複でエラーになる。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">\copy table1(id, value) FROM '/path/to/table1.csv' WITH CSV HEADER;</code></pre>
+
+<p><br>
+テーブルを一つ挟むことでupsertに対応する。 <br>
+table2はtemporaryなので後始末しなくていい。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "># table2(一時テーブル、制約なし)作成
+<span class="hljs-operator"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TEMPORARY</span> <span class="hljs-keyword">TABLE</span> table2 <span class="hljs-keyword">AS</span> <span class="hljs-keyword">TABLE</span> table1 <span class="hljs-keyword">WITH</span> <span class="hljs-keyword">NO</span> DATA;</span>
+
+# table2にCSVをインポート
+\COPY table2(id, value) FROM '/path/to/table1.csv' WITH CSV HEADER;
+
+# upsert
+WITH update_result AS (<span class="hljs-operator"><span class="hljs-keyword">UPDATE</span> table1 <span class="hljs-keyword">SET</span> id = table2.id, <span class="hljs-keyword">value</span> = table2.<span class="hljs-keyword">value</span> <span class="hljs-keyword">FROM</span> table2 <span class="hljs-keyword">WHERE</span> table1.id = table2.id RETURNING table1.id)
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> table1 (id, <span class="hljs-keyword">value</span>) <span class="hljs-keyword">SELECT</span> table2.id, table2.<span class="hljs-keyword">value</span> <span class="hljs-keyword">FROM</span> table2 <span class="hljs-keyword">WHERE</span> table2.id <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> id <span class="hljs-keyword">FROM</span> update_result);</span></code></pre>
+
+<p><strong>ただし、大量データだとI/Oが重い。</strong> <br>
+LIMITつけて間にチェックポイントを挟むとちょっと違う。</p>
+
+<p><br>
+table2作成の別解。シーケンスや制約まで複製するとCSVが取り込めない。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TEMPORARY</span> <span class="hljs-keyword">TABLE</span> table2 (<span class="hljs-keyword">LIKE</span> table1);</span>
+
+# <span class="hljs-operator"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TEMPORARY</span> <span class="hljs-keyword">TABLE</span> table2 (<span class="hljs-keyword">LIKE</span> table1 INCLUDING DEFAULTS INCLUDING <span class="hljs-keyword">CONSTRAINTS</span> INCLUDING INDEXES);</span>
+# <span class="hljs-operator"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TEMPORARY</span> <span class="hljs-keyword">TABLE</span> table2 (<span class="hljs-keyword">LIKE</span> table1 INCLUDING <span class="hljs-keyword">ALL</span>);</span></code></pre>
+
+<p><br>
+table2からtable1へのupsertの別解。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "># table1と紐づくデータを<span class="hljs-operator"><span class="hljs-keyword">update</span>
+<span class="hljs-keyword">UPDATE</span> table1 
+<span class="hljs-keyword">SET</span> id = table2.id, <span class="hljs-keyword">value</span> = table2.<span class="hljs-keyword">value</span>
+<span class="hljs-keyword">FROM</span> table2
+<span class="hljs-keyword">WHERE</span> table1.id = table2.id;</span>
+
+# <span class="hljs-operator"><span class="hljs-keyword">update</span>し終わったtable2の紐付いてるデータを削除
+<span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">FROM</span> table2 
+<span class="hljs-keyword">WHERE</span> id <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> id <span class="hljs-keyword">FROM</span> table1);</span>
+
+# 残ったtable2のデータをtable1へ<span class="hljs-operator"><span class="hljs-keyword">insert</span>
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> table1 (id, <span class="hljs-keyword">value</span>) 
+<span class="hljs-keyword">SELECT</span> table2.id, table2.<span class="hljs-keyword">value</span> 
+<span class="hljs-keyword">FROM</span> table2 
+<span class="hljs-keyword">WHERE</span> id <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> id <span class="hljs-keyword">FROM</span> table1);</span></code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

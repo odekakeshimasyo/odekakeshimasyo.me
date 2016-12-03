@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.io/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>PostgreSQL テーブルやインデックスのサイズSQL | odekakeshimasyo.io</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="postgresql-テーブルやインデックスのサイズsql">PostgreSQL テーブルやインデックスのサイズSQL</h1>
+
+<h2 id="テーブルサイズ">テーブルサイズ</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">SELECT</span> relname, pg_size_pretty ( pg_relation_size(relname::text) ) <span class="hljs-keyword">AS</span> <span class="hljs-keyword">size</span>
+<span class="hljs-keyword">FROM</span> pg_class
+<span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> pg_namespace <span class="hljs-keyword">ON</span> pg_class.relnamespace = pg_namespace.oid <span class="hljs-keyword">AND</span> pg_namespace.nspname = <span class="hljs-string">'public'</span>;</span></code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> pg_relation_size(<span class="hljs-string">'テーブル名'</span>) <span class="hljs-keyword">as</span> テーブル名, pg_relation_size(<span class="hljs-string">'テーブル名'</span>) <span class="hljs-keyword">as</span> テーブル名;</span></code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> pg_table_size(<span class="hljs-string">'テーブル名'</span>) <span class="hljs-keyword">as</span> テーブル名, pg_table_size(<span class="hljs-string">'テーブル名'</span>) <span class="hljs-keyword">as</span> テーブル名;</span> </code></pre>
+
+<blockquote>
+  <p>pg_relation_size() = pg_table_size() + pg_indexes_size()</p>
+</blockquote>
+
+
+
+<h2 id="データベースサイズ">データベースサイズ</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> pg_database_size(<span class="hljs-string">'データベース名'</span>);</span> </code></pre>
+
+
+
+<h2 id="インデックスサイズ">インデックスサイズ</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> pg_indexes_size(<span class="hljs-string">'テーブル名'</span>) <span class="hljs-keyword">as</span> テーブル名, pg_indexes_size(<span class="hljs-string">'テーブル名'</span>) <span class="hljs-keyword">as</span> テーブル名;</span></code></pre>
+
+
+
+<h2 id="コミット数ロールバック数">コミット数、ロールバック数</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">SELECT</span> datname, xact_commit, xact_rollback <span class="hljs-keyword">FROM</span> pg_stat_database;</span> </code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

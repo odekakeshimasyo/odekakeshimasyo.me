@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.me/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>PostgreSQL インデックス 再作成 | odekakeshimasyo.me</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="postgresql-インデックス-再作成">PostgreSQL インデックス 再作成</h1>
+
+<p>PostgreSQLはバキュームしてもインデックスは対象ではなく、最適化されない。 <br>
+ほっとくと肥大化していき、遅延が発生する</p>
+
+<h2 id="サイズ確認">サイズ確認</h2>
+
+<p>インデックス単位</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">pg_relation_size('インデックス名');</code></pre>
+
+<p><br>
+テーブル単位</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">pg_indexes_size('テーブル名');</code></pre>
+
+
+
+<h2 id="reindexコマンドを使う">REINDEXコマンドを使う</h2>
+
+<p>但しインデックス作成時はテーブルロックしてしまう。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">REINDEX DATABASE データベース名;
+REINDEX TABLE テーブル名;
+REINDEX INDEX インデックス名;</code></pre>
+
+
+
+<h2 id="create-index-concurrentlyを使う">CREATE INDEX CONCURRENTLYを使う</h2>
+
+<p>ロックはしない。トランザクションのタイミングによってロックがかかることがあるらしいけど。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">UNIQUE</span> INDEX インデックス名 <span class="hljs-keyword">ON</span> テーブル名(カラム名);</span></code></pre>
+
+<p>オンラインで再作成するときは、消す前に同じインデックスを作って、リネームして、古いほうを削除する。 <br>
+いまのところこれで問題は起きていないですが。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">CREATE</span> INDEX インデックス<span class="hljs-number">2</span> <span class="hljs-keyword">ON</span> テーブル名(カラム名);</span>
+<span class="hljs-operator"><span class="hljs-keyword">BEGIN</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">ALTER</span> INDEX インデックス<span class="hljs-number">1</span> RENAME <span class="hljs-keyword">TO</span> インデックス<span class="hljs-number">3</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">ALTER</span> INDEX インデックス<span class="hljs-number">2</span> RENAME <span class="hljs-keyword">TO</span> インデックス<span class="hljs-number">1</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">DROP</span> INDEX インデックス<span class="hljs-number">3</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">COMMIT</span>;</span></code></pre>
+
+
+
+<h2 id="constraintの再作成">CONSTRAINTの再作成</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">UNIQUE</span> INDEX CONCURRENTLY インデックス<span class="hljs-number">2</span> <span class="hljs-keyword">ON</span> テーブル名 (カラム名);</span>
+<span class="hljs-operator"><span class="hljs-keyword">BEGIN</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> テーブル名 <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">CONSTRAINT</span> インデックス, <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">CONSTRAINT</span> インデックス <span class="hljs-keyword">UNIQUE</span> <span class="hljs-keyword">USING</span> INDEX インデックス<span class="hljs-number">2</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">COMMIT</span>;</span></code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

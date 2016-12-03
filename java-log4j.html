@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.me/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>Java log4j | odekakeshimasyo.me</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="java-log4j">Java log4j</h1>
+
+
+
+<h2 id="no-appenders-could-be-found-for-loggerエラー">No appenders could be found for loggerエラー</h2>
+
+<p>tomcatでcommons-loggingとlog4jを利用するとWARNが出る。</p>
+
+<blockquote>
+  <p>log4j:WARN No appenders could be found for logger (org.apache.commons.digester.Digester.sax). <br>
+  log4j:WARN Please initialize the log4j system properly.</p>
+</blockquote>
+
+<p><br>
+システムプロパティにlog4j.configrationを指定すると解決。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs cs">JAVA_OPTS=-Dlog4j.configuration=file:<span class="hljs-comment"><span class="hljs-xmlDocTag">///</span>path/path/log4j.properties</span></code></pre>
+
+<p><br>
+tomcatのcatalina.propertiesに追加してもいい。</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">log4j<span class="hljs-preprocessor">.configuration</span>=file://path/path/log4j<span class="hljs-preprocessor">.properties</span></code></pre>
+
+<p><br>
+または DOMConfigurator, PropertyConfigurator で直接ファイルを読みにいく</p>
+
+<p>log4jはlog4j.propertiesファイルよりlog4j.xmlを優先して読みに行く。 <br>
+どちらもある場合、log4j.xmlのみ読む。</p>
+
+<p>log4j.xmlを配置した場合は、上記のエラーは出ない。</p>
+
+<p>log4j.xml サンプル:</p>
+
+
+
+<pre class="prettyprint"><code class="language-xml hljs "><span class="hljs-pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="hljs-doctype">&lt;!DOCTYPE log4j:configuration SYSTEM "log4j.dtd"&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">log4j:configuration</span> <span class="hljs-attribute">xmlns:log4j</span>=<span class="hljs-value">"http://jakarta.apache.org/log4j/"</span> &gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-title">appender</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"file"</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"org.apache.log4j.DailyRollingFileAppender"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">param</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"File"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"ucs.log"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">param</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"DatePattern"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"'.'yyyy-MM-dd"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">layout</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"org.apache.log4j.PatternLayout"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">param</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"ConversionPattern"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"%d %5p %c{1}:%L - %m%n"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">layout</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">appender</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-title">root</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">priority</span> <span class="hljs-attribute">value</span> =<span class="hljs-value">"info"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">appender-ref</span> <span class="hljs-attribute">ref</span>=<span class="hljs-value">"file"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">root</span>&gt;</span>
+
+    <span class="hljs-comment">&lt;!-- パッケージ毎にログレベルを指定 この設定だとrootの設定と重なって2重にログ出力される --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">category</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"jp.xxx.xxx"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">priority</span> <span class="hljs-attribute">value</span> =<span class="hljs-value">"debug"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">appender-ref</span> <span class="hljs-attribute">ref</span>=<span class="hljs-value">"file"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">category</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-title">log4j:configuration</span>&gt;</span></code></pre>
+
+<p>Java側サンプル:</p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs "><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AccountService</span> {</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Logger log = Logger.getInstance(AccountService.class);
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span>() {
+        log.info(<span class="hljs-string">"INFOログ"</span>);
+    }
+}</code></pre>
+
+
+
+<h2 id="速度改善">速度改善</h2>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs "><span class="hljs-keyword">if</span>(log.isDebugEnabled()) {
+    log.debug(<span class="hljs-string">"debug log id="</span> + value);
+}</code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

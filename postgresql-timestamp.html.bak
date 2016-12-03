@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.io/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>PostgreSQL 日付 | odekakeshimasyo.io</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="postgresql-日付">PostgreSQL 日付</h1>
+
+<h2 id="今日">今日</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">current_date</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">date</span> <span class="hljs-string">'today'</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">timestamp</span> <span class="hljs-string">'today'</span>;</span>
+// <span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">current_date</span> + <span class="hljs-string">'-1 days'</span>;</span> // エラーになる</code></pre>
+
+
+
+<h2 id="昨日">昨日</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">current_date</span> - <span class="hljs-number">1</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">date</span> <span class="hljs-string">'yesterday'</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">timestamp</span> <span class="hljs-string">'yesterday'</span>;</span> // 時間は00:00:00
+<span class="hljs-operator"><span class="hljs-keyword">select</span> now() + <span class="hljs-string">'-1 days'</span>;</span></code></pre>
+
+
+
+<h2 id="明日">明日</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">current_date</span> + <span class="hljs-number">1</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">date</span> <span class="hljs-string">'tomorrow'</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">timestamp</span> <span class="hljs-string">'tomorrow'</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> now() + <span class="hljs-string">'1 days'</span>;</span></code></pre>
+
+
+
+<h2 id="7日前">7日前</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">current_date</span> - <span class="hljs-number">7</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">current_timestamp</span> - <span class="hljs-number">7</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">select</span> <span class="hljs-keyword">current_timestamp</span> + <span class="hljs-string">'-7 days'</span>;</span></code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

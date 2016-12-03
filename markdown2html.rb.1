@@ -1,0 +1,86 @@
+require 'redcarpet'
+require 'yaml'
+require 'pp'
+require 'coderay'
+
+#
+$metadata_reg = "\\A^---\\n([\\s\\S]*?)^---\\n"
+
+
+
+class CodeRayHTML < Redcarpet::Render::HTML
+	def block_code(code, language)
+		#pp CodeRay::WordList.new(:ident)
+		#pp WordList.new(:ident)
+		#pp CodeRay::Scanners[:sql]::KEYWORDS.put('copy')
+		#p HTMLEntities.new.encode(code, :hexadecimal)
+		CodeRay::Scanners::SQL::IDENT_KIND['copy'] = :keyword
+		CodeRay::Scanners::SQL::IDENT_KIND['delimiter'] = :keyword
+		CodeRay::Scanners::SQL::IDENT_KIND['cast'] = :keyword
+		CodeRay::Scanners::SQL::IDENT_KIND['coalesce'] = :keyword
+		CodeRay::Plugin.register_for(:sh)
+		#puts CodeRay::Scanners[:sql].const_get(:KEYWORDS)
+		#p language
+		#return ''
+		
+		return CodeRay.scan(code, language ? language.to_sym : :text).div(:css => :class)
+			.gsub(/\<\/span\>\<span class=\"error\"\>/, '')
+			.gsub(/\<span class=\"error\"\>/, '<span class="unicode">')
+		
+	end
+end
+
+#
+#  yaml + markdown => {:content_html => , :title => ..}
+#
+def parse(file_text)
+	ret = Hash.new('')
+	
+	markdown_text = /#{$metadata_reg}/ =~ file_text ? file_text.gsub(/#{$metadata_reg}/, '') : file_text
+	ret[:content_html] = Redcarpet::Markdown.new(
+					Redcarpet::Render::HTML.new(filter_html: true, hard_wrap: true),
+					#CodeRayHTML.new(filter_html: true, hard_wrap: true),
+					tables: true, 
+					no_intra_emphasis: true, 
+					fenced_code_blocks: true, 
+					autolink: true
+				).render(markdown_text)
+	
+	metadata_text = /#{$metadata_reg}/ =~ file_text ? file_text.match(/#{$metadata_reg}/)[1] : nil
+	YAML.load(metadata_text).each{|key, value|
+		ret[:"#{key.downcase}"] = value.to_s
+	}
+	return ret
+end
+
+
+
+#
+# メニューHTML作成
+#
+nav = {}
+Dir::glob(Dir.pwd + '/*.md')
+		.delete_if{|filepath| filepath.rindex('/index.md') || filepath =~ /\/[0-9]*.md/}
+		.each{|filepath|
+	current_md = parse(File.open(filepath, 'r').read)
+	nav[current_md[:title]] = File.basename(filepath, '.md') + '.html';
+}
+
+nav_html = ''
+nav.sort_by{|key,value| key.to_s}.each{|title, path|
+	nav_html += "<li><a href=\"/#{path}\">#{title}</a></li>"
+}
+
+
+#
+# template.htmlからHTMLファイル生成
+#
+target_md = parse($stdin.read)
+output_html = File.open(Dir.pwd + '/template.html', 'r').read
+	.gsub(/{{{nav}}}/, nav_html)
+	.gsub(/{{{title}}}/, target_md[:title])
+	.gsub(/{{{content}}}/, target_md[:content_html])
+	
+puts output_html
+
+

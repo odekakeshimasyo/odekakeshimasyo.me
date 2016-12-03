@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.me/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>CSS タブ切替 | odekakeshimasyo.me</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="css-タブ切替">CSS タブ切替</h1>
+
+<p>選択状態のタブがボーダーの上にくるように、 <br>
+ネガティブマージンで要素をズラす。</p>
+
+
+
+<pre class="prettyprint"><code class="language-css hljs "><span class="hljs-tag">ul</span><span class="hljs-class">.tabs</span> <span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">border-bottom</span>:<span class="hljs-value"> <span class="hljs-number">3</span>px solid <span class="hljs-hexcolor">#ddf</span></span></span>;
+<span class="hljs-rule">}</span></span>
+
+<span class="hljs-tag">ul</span><span class="hljs-class">.tabs</span><span class="hljs-pseudo">:after</span> <span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">content</span>:<span class="hljs-value"><span class="hljs-string">"."</span></span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">display</span>:<span class="hljs-value">block</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"><span class="hljs-number">0</span></span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">clear</span>:<span class="hljs-value">both</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">visibility</span>:<span class="hljs-value">hidden</span></span>;
+<span class="hljs-rule">}</span></span>
+
+<span class="hljs-tag">ul</span><span class="hljs-class">.tabs</span> <span class="hljs-tag">li</span> <span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">width</span>:<span class="hljs-value"><span class="hljs-number">200</span>px</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"><span class="hljs-number">100</span>px</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">float</span>:<span class="hljs-value">left</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">text-align</span>:<span class="hljs-value">center</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">background-color</span>:<span class="hljs-value"><span class="hljs-hexcolor">#fff</span></span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">border</span>:<span class="hljs-value"><span class="hljs-number">3</span>px solid <span class="hljs-hexcolor">#ddf</span></span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">border-bottom</span>:<span class="hljs-value">none</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">margin-right</span>:<span class="hljs-value"><span class="hljs-number">30</span>px</span></span>;
+<span class="hljs-rule">}</span></span>
+
+<span class="hljs-tag">ul</span><span class="hljs-class">.tabs</span> <span class="hljs-tag">li</span><span class="hljs-class">.select</span> <span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">margin-bottom</span>:<span class="hljs-value"> -<span class="hljs-number">3</span>px</span></span>;
+    <span class="hljs-rule"><span class="hljs-attribute">padding-bottom</span>:<span class="hljs-value"> <span class="hljs-number">3</span>px</span></span>;
+<span class="hljs-rule">}</span></span></code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">ul</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"tabs"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">li</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"select"</span>&gt;</span>tab1<span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">li</span>&gt;</span>tab2<span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">li</span>&gt;</span>tab3<span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">ul</span>&gt;</span></code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

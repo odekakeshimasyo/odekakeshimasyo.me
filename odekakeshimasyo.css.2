@@ -1,0 +1,45 @@
+/* Ubuntu, Poiret+One, Nixie+One, Josefin+Slab, Gruppo, Advent+Pro, Passero+One, Titillium Web */
+
+/* clearfix */
+body:before, section:before, header:before,  menu:before, main:before, article:before, nav:before, footer:before, div:before, .c:before {content: " ";display: table;}
+body:after, section:after, header:after,  menu:after, main:after, article:after, nav:after, footer:after, div:after, .c:after {content:" ";display: table;clear:both;height:0;}
+
+/* common */
+body, section, header, menu, main, article, aside, summary, nav, footer .c {display:block;margin:0;}
+* {box-sizing:border-box;font-family:'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN',Meiryo, sans-serif;}
+
+/* site-layout #3d4f5d, #a5006a */
+html {height:100%;}
+body {border-style:solid;border-width:0 0 0 20em;min-height:100%;width:100%;overflow-x:hidden;}
+header {width:20em;padding:0 1em 2em 0;margin-left:-20em;float:left;}
+main, section, aside {padding:0 9% 5em 8%;width:100%;word-break:break-all;float:left;}
+
+/* site-style */
+body {color:#515151;border-color:#013D6B;}/* background-color:#fe0192, #c5006a, #131631*/
+a {text-decoration:none;color:blue;}
+a:hover {text-decoration:underline;}
+a:focus {outline-color:#999;}
+h1 {font-size:2em;margin:0.7em 0 0 0;font-weight:normal;}
+h1:before {content: '# ';}
+h2 {font-size:150%;margin:2em 0 0 0;color:#013D6B;}
+pre code {word-break:break-word;font-size:85%;}
+blockquote {border-left:5px solid #ccc;margin:0 0 0 1em;padding:1px 1em;}
+em {color:red;}
+header * {color:#f2fBFC;}
+header h2 {margin:1em 0 1em 15px;font-weight:normal;color:#fff;}
+header nav ul {list-style-type:none;padding-left:20px;}
+header nav ul li {font-size:0.8em;text-overflow:ellipsis;overflow-x:hidden;white-space:nowrap;}
+main pre code {border:1px solid #ddd;}
+table {border-spacing:0;}
+th {background-color:#F2F2F2;}
+th, td {border-bottom:1px solid #bbb;padding:8px 10px;}
+
+.socialbutton {min-height:161px;}
+.socialbutton > div {float:left !important;margin:0 1em 0 0 !important;height: 81px !important;}
+
+/* responsive */
+@media (max-width:800px) {
+	body {border-left-width:0;border-top-width:5em;}
+	header {margin:-5em 0 0 0;padding:0;width:100%;}
+	nav {display:none;}
+}

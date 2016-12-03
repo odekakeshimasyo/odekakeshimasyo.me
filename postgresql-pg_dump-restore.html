@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.me/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>PostgreSQL pg_dump pg_restore | odekakeshimasyo.me</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="postgresql-pgdump-pgrestore">PostgreSQL pg_dump pg_restore</h1>
+
+<p>pg_restoreで利用できるアーカイブ形式で出力すると便利</p>
+
+<pre class="prettyprint"><code class="language-sh hljs perl">pg_dump -Fc mydb &gt; db.<span class="hljs-keyword">dump</span></code></pre>
+
+<p><br>
+db.dumpのスキーマ、データをnewdbデータベースで(再)作成</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">pg_restore <span class="hljs-comment">--dbname=newdb db.dump</span></code></pre>
+
+<p><br>
+テーブル毎にデータを登録することも可能</p>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs brainfuck"><span class="hljs-comment">pg_restore</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">dbname=newdb</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">table=newtable</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">data</span><span class="hljs-literal">-</span><span class="hljs-comment">only</span> <span class="hljs-comment">db</span><span class="hljs-string">.</span><span class="hljs-comment">dump</span></code></pre>
+
+<p><br>
+アーカイブファイルの中身を参照</p>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs brainfuck"><span class="hljs-comment">pg_restore</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">list</span> <span class="hljs-comment">db</span><span class="hljs-string">.</span><span class="hljs-comment">dump</span></code></pre>
+
+<p><br>
+スキーマのみも可能。インデックスは作成されないけど。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs brainfuck"><span class="hljs-comment">pg_restore</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">dbname=newdb</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">schema</span><span class="hljs-literal">-</span><span class="hljs-comment">only</span> <span class="hljs-comment">db</span><span class="hljs-string">.</span><span class="hljs-comment">dump</span></code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

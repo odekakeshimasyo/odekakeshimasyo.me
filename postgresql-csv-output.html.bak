@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.io/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>PostgreSQL CSV 出力 | odekakeshimasyo.io</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="postgresql-csv-出力">PostgreSQL CSV 出力</h1>
+
+
+
+<h2 id="copy文">COPY文</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">COPY テーブル名 TO '/tmp/output.csv' DELIMITER ',';</code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">COPY テーブル名 (カラム1, カラム2, カラム3) TO '/tmp/output.csv' DELIMITER ',';</code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">COPY (<span class="hljs-operator"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> テーブル) <span class="hljs-keyword">TO</span> <span class="hljs-string">'/tmp/output.csv'</span> DELIMITER <span class="hljs-string">','</span>;</span></code></pre>
+
+
+
+<h2 id="psqlコマンド">psqlコマンド</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs lasso">psql データベース名 <span class="hljs-attribute">-c</span> <span class="hljs-string">"SQL文"</span> <span class="hljs-attribute">-A</span> <span class="hljs-attribute">-F</span>, <span class="hljs-attribute">-t</span> <span class="hljs-subst">&gt;</span> CSVファイル名</code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs lasso">psql データベース名 <span class="hljs-attribute">-f</span> SQLファイル名 <span class="hljs-attribute">-A</span> <span class="hljs-attribute">-F</span>, <span class="hljs-subst">&gt;</span> CSVファイル名</code></pre>
+
+<p>-A 桁揃えしない <br>
+ -F 区切り文字指定 <br>
+ -t カラム名除去</p>
+
+
+
+<h2 id="sql文">SQL文</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">SELECT</span>
+<span class="hljs-string">'"列名"'</span>,
+<span class="hljs-string">'"列名"'</span>
+<span class="hljs-keyword">UNION</span> <span class="hljs-keyword">ALL</span>
+<span class="hljs-keyword">SELECT</span>
+<span class="hljs-string">'"'</span> || coalesce(列名, <span class="hljs-string">''</span>) || <span class="hljs-string">'"'</span>,
+<span class="hljs-string">'"'</span> || coalesce(<span class="hljs-keyword">cast</span>(列名 <span class="hljs-keyword">as</span> text), <span class="hljs-string">''</span>) || <span class="hljs-string">'"'</span>
+<span class="hljs-keyword">FROM</span>
+テーブル名;</span></code></pre>
+
+
+
+<h2 id="postgresqlのメタコマンド">PostgreSQLのメタコマンド</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs bash">psql データベース名 <span class="hljs-operator">-f</span> meta.sql</code></pre>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">\o CSVファイル.csv
+\a
+\pset fieldsep ','
+\pset t
+
+<span class="hljs-operator"><span class="hljs-keyword">SELECT</span>
+<span class="hljs-string">'"列名"'</span>,
+<span class="hljs-string">'"列名"'</span>
+<span class="hljs-keyword">UNION</span> <span class="hljs-keyword">ALL</span>
+<span class="hljs-keyword">SELECT</span>
+<span class="hljs-string">'"'</span> || coalesce(列名, <span class="hljs-string">''</span>) || <span class="hljs-string">'"'</span>,
+<span class="hljs-string">'"'</span> || coalesce(<span class="hljs-keyword">cast</span>(列名 <span class="hljs-keyword">as</span> text), <span class="hljs-string">''</span>) || <span class="hljs-string">'"'</span>
+<span class="hljs-keyword">FROM</span>
+テーブル名;</span>
+\o</code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>
