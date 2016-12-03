@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.me/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>PostgreSQL vacuum | odekakeshimasyo.me</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="postgresql-vacuum">PostgreSQL vacuum</h1>
+
+<h2 id="バキュームが必要かの確認">バキュームが必要かの確認</h2>
+
+<p>デッドタプルがどのくらいの割合があるか確認</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">SELECT</span>
+    relname,
+    n_live_tup,
+    n_dead_tup
+<span class="hljs-keyword">FROM</span> 
+    pg_stat_user_tables 
+<span class="hljs-keyword">WHERE</span> relname = <span class="hljs-string">'テーブル名'</span>;</span></code></pre>
+
+
+
+<h2 id="最後に行ったvacuum-autovacuumの日時を確認">最後に行ったvacuum, autovacuumの日時を確認</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">SELECT</span>
+    relname,
+    n_live_tup,
+    n_dead_tup,
+    last_vacuum,
+    last_autovacuum
+<span class="hljs-keyword">FROM</span> pg_stat_all_tables
+<span class="hljs-keyword">WHERE</span> relname = <span class="hljs-string">'テーブル名'</span>;</span></code></pre>
+
+
+
+<h2 id="バキュームの実行ログを出力して頻度を確認">バキュームの実行ログを出力して頻度を確認</h2>
+
+<p>ログレベルをDEBUG2にしなくてもバキュームの実行ログが出力できる。 <br>
+設定値（ミリ秒）以上時間がかかったとき</p>
+
+<blockquote>
+  <p>log_autovacuum_min_duration = ミリ秒 <br>
+  -1は非表示、0は全て表示。</p>
+</blockquote>
+
+<p>バキュームの実行 <br>
+VACUUM文で行う場合</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs ">VACUUM (ANALYZE) テーブル名;</code></pre>
+
+<p><br>
+vacuumdbコマンドで行う場合</p>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs brainfuck"><span class="hljs-comment">/usr/local/pgsql/bin/vacuumdb</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">analyze</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">table</span> <span class="hljs-comment">'テーブル名'</span> <span class="hljs-comment">bkdb</span></code></pre>
+
+<p>テーブル名は文字列で渡す。 <br>
+バキューム＋アナライズは –analyzeオプションをつける。</p>
+
+
+
+<h2 id="パラメータ調整して1回のvacuumの負荷を軽減してみる">パラメータ調整して1回のVACUUMの負荷を軽減してみる</h2>
+
+<p>autovacuum_vacuum_cost_limitを調整してみる。 <br>
+デフォルトは-1(vacuum_cost_limit=200が適用される)</p>
+
+<p>普段はautovacuumをOFFにして、 <br>
+一回あたりのバキュームの負荷を気にしながら手動でバキュームを行いたい場合を考えてみた。 <br>
+vacuum_cost_limitを限りなく小さくする。 <br>
+一度VACUUMが走り出したらキリのいいところまで止まってくれないからか。。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs bash">psql <span class="hljs-operator">-f</span> <span class="hljs-string">'vacuum.sql'</span> データベース名;</code></pre>
+
+<p><br>
+vacuum.sql</p>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">set</span> vacuum_cost_limit=<span class="hljs-number">10</span>;</span> # セッション中のみ適用
+vacuum analyze テーブル名1;
+vacuum analyze テーブル名2;
+vacuum analyze テーブル名3;</code></pre>
+
+
+
+<h2 id="postgresqlの現在の設定の確認">PostgreSQLの現在の設定の確認</h2>
+
+
+
+<pre class="prettyprint"><code class="language-sql hljs "><span class="hljs-operator"><span class="hljs-keyword">show</span> <span class="hljs-keyword">all</span>;</span>
+<span class="hljs-operator"><span class="hljs-keyword">show</span> &lt;設定パラメータ&gt;;</span></code></pre>
+
+
+
+<h2 id="設定の動的反映">設定の動的反映</h2>
+
+<p>サービス中でも再起動を行わずに設定を動的に反映する（再起動が必須な設定項目もある）</p>
+
+<p>まずpostgresql.conf で反映したい設定に変更。 <br>
+設定後、以下を実行する。</p>
+
+
+
+<pre class="prettyprint"><code class="language-sh hljs ">pg_ctl reload</code></pre>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>

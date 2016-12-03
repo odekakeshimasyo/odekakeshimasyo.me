@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.me/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>Salesforce Apex カスタム設定 | odekakeshimasyo.me</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/odekakeshimasyo.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/docco.min.css" onload="window.hljscss = 1;" />
+<script>window.hljscss || document.write('<link rel="stylesheet" href="/highlight.docco.min.css" \/>');</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>window.hljs || document.write('<script src="/highlight.min.js"><\/script>');</script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/jquery.min.js"><\/script>');</script>
+<script type="text/javascript" src="/odekakeshimasyo.min.js"></script>
+</head>
+<body>
+
+<header>
+<svg viewBox="23 20 176 164" width="170" height="150"><path d="M100,20,117,75,176,75,129,109,147,164,100,130,52,164,70,109,23,75,82,75z"></path></svg>
+<h2>odekakeshimasyo.me</h2>
+<nav>
+<ul>
+<li><a href="/web-cdn-fallback.html">CDNダウン時のjs/cssのフォールバック</a></li><li><a href="/css-border.html">CSS border表示</a></li><li><a href="/css-table-header-fixed.html">CSS tableのヘッダを固定してスクロール</a></li><li><a href="/css-vertical-align-middle.html">CSS vertical-align:middle</a></li><li><a href="/css-display-table.html">CSS width:"残り全部"の指定</a></li><li><a href="/css-z-index-html-depth.html">CSS z-indexをHTMLタグ階層の深さで代用</a></li><li><a href="/css-tab-selective.html">CSS タブ切替</a></li><li><a href="/css-label-for-checkbox.html">CSS トグルボタン(スタイル切り替え)</a></li><li><a href="/css-width-interval.html">CSS 等間隔に横並び</a></li><li><a href="/java-log4j.html">Java log4j</a></li><li><a href="/nginx-access_log-filter.html">NGINX access_log 特定のログを除外</a></li><li><a href="/postgresql-csv-output.html">PostgreSQL CSV 出力</a></li><li><a href="/postgresql-csv-import.html">PostgreSQL CSV 取り込み upsert</a></li><li><a href="/postgresql-idleprocess.html">PostgreSQL idleプロセス開放</a></li><li><a href="/postgresql-pg_dump-pg_restore.html">PostgreSQL pg_dump pg_restore</a></li><li><a href="/postgresql-vacuum.html">PostgreSQL vacuum</a></li><li><a href="/postgresql-reindex.html">PostgreSQL インデックス 再作成</a></li><li><a href="/postgresql-statistics.html">PostgreSQL テーブルやインデックスのサイズSQL</a></li><li><a href="/postgresql-timestamp.html">PostgreSQL 日付</a></li><li><a href="/postgresql-array.html">PostgreSQL 配列型</a></li><li><a href="/salesforce-ajaxtoolkit.html">Salesforce Ajax Toolkit</a></li><li><a href="/salesforce-apex-future.html">Salesforce Apex @future</a></li><li><a href="/salesforce-apex-mac.html">Salesforce Apex MAC(メッセージ認証コード)生成</a></li><li><a href="/salesforce-apex-soql-to-collection.html">Salesforce Apex SOQL結果をコレクションで取得</a></li><li><a href="/salesforce-apex-savepoint.html">Salesforce Apex Savepointの指定</a></li><li><a href="/salesforce-apex-xmldom.html">Salesforce Apex XMLDOMクラス</a></li><li><a href="/salesforce-apex-customsetting.html">Salesforce Apex カスタム設定</a></li><li><a href="/salesforce-apex-hash.html">Salesforce Apex ハッシュ値生成</a></li><li><a href="/salesforce-apex-bytenum.html">Salesforce Apex バイト数取得</a></li><li><a href="/salesforce-apex-date-timestamp.html">Salesforce Apex 日付 時間</a></li><li><a href="/salesforce-cannot_insert_update_activate_entity.html">Salesforce CANNOT_INSERT_UPDATE_ACTIVATE_ENTITY</a></li><li><a href="/salesforce-cpu-time-limit-exceeded.html">Salesforce CPU time limit exceeded</a></li><li><a href="/salesforce-dataloadercliq.html">Salesforce DataloaderCLIq</a></li><li><a href="/salesforce-dataloadercliq-database.html">Salesforce DataloaderCLIq データベース接続</a></li><li><a href="/salesforce-describe.html">Salesforce Describe</a></li><li><a href="/salesforce-entity_is_deleted.html">Salesforce ENTITY_IS_DELETED</a></li><li><a href="/salesforce-invalid_cross_reference_key.html">Salesforce INVALID_CROSS_REFERENCE_KEY</a></li><li><a href="/salesforce-invalid_field_for_insert_update.html">Salesforce INVALID_FIELD_FOR_INSERT_UPDATE</a></li><li><a href="/salesforce-invalid_session_id.html">Salesforce INVALID_SESSION_ID</a></li><li><a href="/salesforce-javascript-remoting.html">Salesforce Javascript Remoting</a></li><li><a href="/salesforce-plural-label.html">Salesforce Must specify a non-empty plural label for the CustomObject</a></li><li><a href="/salesforce-no_mass_mail_permission.html">Salesforce NO_MASS_MAIL_PERMISSION</a></li><li><a href="/salesforce-non-selective-query.html">Salesforce Non-selective query</a></li><li><a href="/salesforce-request_running_too_long.html">Salesforce REQUEST_RUNNING_TOO_LONG</a></li><li><a href="/salesforce-single_email_limit_exceeded.html">Salesforce SINGLE_EMAIL_LIMIT_EXCEEDED</a></li><li><a href="/salesforce-soql.html">Salesforce SOQL</a></li><li><a href="/salesforce-sosl-find.html">Salesforce SOSL FIND検索</a></li><li><a href="/salesforce-storage_limit_exceeded.html">Salesforce STORAGE_LIMIT_EXCEEDED</a></li><li><a href="/salesforce-systemcalloutexception-exceeded.html">Salesforce System.CalloutException: Exceeded</a></li><li><a href="/salesforce-systemcalloutexception-readtimeout.html">Salesforce System.CalloutException: Read timed out</a></li><li><a href="/salesforce-systemqueryexception-list-has-no-rows-for-assignment-to-sobject.html">Salesforce System.QueryException List has no rows for assignment to SObject</a></li><li><a href="/salesforce-systemstringexception.html">Salesforce System.StringException: Invalid id</a></li><li><a href="/salesforce-systemtypeexception.html">Salesforce System.TypeException</a></li><li><a href="/salesforce-unable_to_lock_row.html">Salesforce UNABLE_TO_LOCK_ROW</a></li><li><a href="/salesforce-urlparameter-get.html">Salesforce URLパラメータを取得</a></li><li><a href="/salesforce-visualforce.html">Salesforce Visualforce</a></li><li><a href="/salesforce-visualforce-pdf.html">Salesforce Visualforce PDF出力</a></li><li><a href="/salesforce-visualforce-customsetting.html">Salesforce Visualforce カスタム設定</a></li><li><a href="/salesforce-visualforce-inputfield-inputtext-inputtextarea.html">Salesforce Visualforce テキストボックス/テキストエリア</a></li><li><a href="/salesforce-visualforce-forwardpage.html">Salesforce Visualforce 画面遷移</a></li><li><a href="/salesforce-schedule.html">Salesforce スケジュール設定</a></li><li><a href="/salesforce-deploy.html">Salesforce デプロイ</a></li><li><a href="/salesforce-package.html">Salesforce パッケージ化</a></li><li><a href="/salesforce-document.html">Salesforce ファイル保存 Document</a></li><li><a href="/salesforce-report.html">Salesforce レポート 検索条件 "次の文字列を含む"</a></li><li><a href="/salesforce-externalid.html">Salesforce 外部ID</a></li><li><a href="/salesforce-formula-date-calculate.html">Salesforce 数式 日付の計算</a></li><li><a href="/salesforce-date-convert.html">Salesforce 日付フォーマット変更する正規表現</a></li><li><a href="/salesforce-undeploy.html">Salesforce 本番組織からリソースを削除</a></li><li><a href="/salesforce-migrationtool.html">Salesforce 移行ツール (Migration Tool)</a></li><li><a href="/salesforce-setting.html">Salesforce 設定画面で出来ること</a></li><li><a href="/salesforce-pattern-checklist.html">Salesforce 設計 チェックリスト(古い)</a></li><li><a href="/salesforce-pattern-emptyupdate.html">Salesforce 設計 データ空更新でワークフローを動かす</a></li><li><a href="/salesforce-pattern-softdelete.html">Salesforce 設計 論理削除</a></li><li><a href="/bash.html">bash</a></li><li><a href="/iptables-ipset-drop-countries.html">iptables ipsetで海外からのアクセスを遮断</a></li>
+</ul>
+</nav>
+</header>
+
+<main>
+<h1>Salesforce Apex カスタム設定</h1>
+<h2>カスタム設定値の取得/変更</h2>
+
+<p>Salesforce画面から[設定]-[開発]-[カスタム設定]でカスタム設定、カスタム項目を追加する。<br/>
+一度追加したカスタム項目に初期値として適当な値も登録する。<br/>
+（登録しないと階層型だとNullPointerExceptionが出る）</p>
+
+<table><thead>
+<tr>
+<th>設定種別</th>
+<th>階層</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>カスタム設定のAPI参照名</td>
+<td>CustomSetting__c</td>
+</tr>
+<tr>
+<td>カスタム項目のAPI参照名</td>
+<td>Item__c</td>
+</tr>
+</tbody></table>
+
+<h2>Apexからカスタム設定値を参照</h2>
+
+<pre><code>// ユーザ毎の値を保持した設定オブジェクト
+CustomSetting__c setting = CustomSetting__c.getInstance();
+
+// デフォルト値を保持した設定オブジェクト
+CustomSetting__c orgDefaultSetting = CustomSetting__c.getOrgDefaults();
+
+// 空オブジェクト
+CustomSetting__c newSetting = new CustomSetting__c();
+
+// カスタム設定のカスタム項目値の取得
+String item = setting.Item__c;
+// setting.get(&#39;Item__c&#39;);
+
+// カスタム設定に値を設定
+setting.Item__c = value;
+// setting.put(&#39;Item__c&#39;, value);
+
+// カスタム項目値の更新
+setting.Item__c = &#39;update string&#39;;
+update setting;
+</code></pre>
+
+<h2>設定種別がリストの場合</h2>
+
+<table><thead>
+<tr>
+<th>設定種別</th>
+<th>リスト</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>カスタム設定のAPI参照名</td>
+<td>CustomSetting__c</td>
+</tr>
+<tr>
+<td>カスタム項目のAPI参照名</td>
+<td>Item__c</td>
+</tr>
+</tbody></table>
+
+<h2>Apexからカスタム設定値を参照</h2>
+
+<pre><code>// Map
+Map&lt;String, CustomSetting__c&gt; settingMap = CustomSetting__c.getAll();
+
+// 登録データ一覧
+for (String key : settingMapkeySet()) {
+	System.debug(&#39;&#39; + key + &#39;: &#39; + settingMap.get(key));
+}
+</code></pre>
+
+<h2>テストクラス実行時にgetInstance()しようとするとnullになる場合</h2>
+
+<p>テスト実行時はデータが何も入っていない状態で実行される。<br/>
+そのため、テスト実行前にテスト用の設定データもinsertする必要がある。</p>
+
+<p>カスタム設定の値もデータとして扱われるため、テスト処理を実行する前にinsertする必要がある。</p>
+
+<pre><code>// カスタム設定の初期化
+CustomSetting__c setting = new CustomSetting__c();
+setting.Item__c = &#39;テストテスト&#39;;
+insert setting;
+
+/*
+ * テスト開始
+ */
+Test.startTest();
+
+// 取得できる
+CustomSetting__c setting = CustomSetting__c.getInstance();
+
+Test.stopTest();
+</code></pre>
+
+</main>
+
+
+
+<aside class="socialbutton">
+<a class="twitter" href="http://twitter.com/share?url=https://odekakeshimasyo.me/salesforce-apex-customsetting.html&text=Salesforce%20Apex%20%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E8%A8%AD%E5%AE%9A%20%7C%20odekakeshimasyo.me"><svg viewBox="0 0 1024 1024" width="1em" height="1em"><path d="M1024 194.418c-37.676 16.708-78.164 28.002-120.66 33.080 43.372-26 76.686-67.17 92.372-116.23-40.596 24.078-85.556 41.56-133.41 50.98-38.32-40.83-92.922-66.34-153.346-66.34-116.022 0-210.088 94.058-210.088 210.078 0 16.466 1.858 32.5 5.44 47.878-174.6-8.764-329.402-92.4-433.018-219.506-18.084 31.028-28.446 67.116-28.446 105.618 0 72.888 37.088 137.192 93.46 174.866-34.438-1.092-66.832-10.542-95.154-26.278-0.020 0.876-0.020 1.756-0.020 2.642 0 101.788 72.418 186.696 168.522 206-17.626 4.8-36.188 7.372-55.348 7.372-13.538 0-26.698-1.32-39.528-3.772 26.736 83.46 104.32 144.206 196.252 145.896-71.9 56.35-162.486 89.934-260.916 89.934-16.958 0-33.68-0.994-50.116-2.94 92.972 59.61 203.402 94.394 322.042 94.394 386.422 0 597.736-320.124 597.736-597.744 0-9.108-0.206-18.168-0.61-27.18 41.056-29.62 76.672-66.62 104.836-108.748z" /></svg>Twitter<span></span></a>
+<a class="facebook" href="http://www.facebook.com/share.php?u=https://odekakeshimasyo.me/salesforce-apex-customsetting.html" onclick="window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;"><svg viewBox="0 0 1024 1024" width="1em" height="1em"><path d="M672 192c-88.366 0-160 71.634-160 160v96h-128v128h128v448h128v-448h144l32-128h-176v-96c0-17.672 14.326-32 32-32h160v-128h-160z" /></svg>Facebook</a>
+<a class="hatebu" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://odekakeshimasyo.me/salesforce-apex-customsetting.html&title=Salesforce%20Apex%20%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E8%A8%AD%E5%AE%9A%20%7C%20odekakeshimasyo.me"><svg viewBox="0 0 1024 1024" width="1em" height="1em"><g transform="matrix(1 0 0 -1 0 960)"><path d="M965.702 180.845c0-55.779-45.218-100.997-100.997-100.997s-100.997 45.218-100.997 100.997c0 55.779 45.218 100.997 100.997 100.997s100.997-45.218 100.997-100.997zM772.732 840.666h183.939v-502.362h-183.939v502.362zM492.962 502.693c0 0 127.093 8.012 127.093 160.328 0 176.36-159.157 177.249-250.011 177.249-58.934 0-88.7 0-127.816 0h-183.939v-760.818h183.939c32.599 0 73.484 0 125.143 0 251.181 0 293.938 137.324 293.938 225.504s-42.757 171.013-168.347 197.738zM252.12 696.97c70.103 0 66.953 0 85.507 0 16.032 0 85.507-6.835 85.507-72.972 0-78.159-60.126-75.493-100.202-75.493-40.084 0-20.042 0-70.811 0v148.465zM352.322 241.216c-46.767 0-65.472 0-100.209 0v167.004c0 0 44.094 0 102.211 0s102.203-12.022 102.203-83.505-57.445-83.498-104.205-83.498z" /></g></svg>はてなブックマーク</a>
+<a class="googleplus" href="https://plus.google.com/share?url=https://odekakeshimasyo.me/salesforce-apex-customsetting.html" onclick="window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;"><svg viewBox="0 0 1024 1024" width="1em" height="1em"><path d="M559.066 64c0 0-200.956 0-267.94 0-120.12 0-233.17 91.006-233.17 196.422 0 107.726 81.882 194.666 204.088 194.666 8.498 0 16.756-0.17 24.842-0.752-7.93 15.186-13.602 32.288-13.602 50.042 0 29.938 16.104 54.21 36.468 74.024-15.386 0-30.242 0.448-46.452 0.448-148.782-0.002-263.3 94.758-263.3 193.020 0 96.778 125.542 157.314 274.334 157.314 169.624 0 263.306-96.244 263.306-193.028 0-77.6-22.896-124.072-93.686-174.134-24.216-17.144-70.53-58.836-70.53-83.344 0-28.72 8.196-42.868 51.428-76.646 44.312-34.624 75.672-83.302 75.672-139.916 0-67.406-30.020-133.098-86.372-154.772h84.954l59.96-43.344zM465.48 719.458c2.126 8.972 3.284 18.206 3.284 27.628 0 78.2-50.392 139.31-194.974 139.31-102.842 0-177.116-65.104-177.116-143.3 0-76.642 92.126-140.444 194.964-139.332 24 0.254 46.368 4.116 66.67 10.69 55.826 38.826 95.876 60.762 107.172 105.004zM300.818 427.776c-69.038-2.064-134.636-77.226-146.552-167.86-11.916-90.666 34.37-160.042 103.388-157.99 69.010 2.074 134.638 74.814 146.558 165.458 11.906 90.66-34.39 162.458-103.394 160.392zM832 256v-192h-64v192h-192v64h192v192h64v-192h192v-64z" /></svg>Google+</a>
+<a class="pocket" href="http://getpocket.com/edit?url=https://odekakeshimasyo.me/salesforce-apex-customsetting.html&title=Salesforce%20Apex%20%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E8%A8%AD%E5%AE%9A%20%7C%20odekakeshimasyo.me" onclick="window.open(this.href, 'FBwindow', 'width=550, height=350, menubar=no, toolbar=no, scrollbars=yes'); return false;"><svg viewBox="0 0 1024 1024" width="1em" height="1em"><g transform="matrix(1 0 0 -1 0 960)"><path d="M880.326 858.685h-742.207c-50.48 0-91.395-40.922-91.395-91.395v-251.13c0-2.016 0.094-3.873 0.217-5.643-0.137-4.378-0.217-8.836-0.217-13.417 0-255.436 207.073-462.502 462.509-462.502 252.677 0 457.885 202.651 462.293 454.28 0.13 1.698 0.21 3.49 0.21 5.505v272.899c0 50.473-40.929 91.402-91.409 91.402zM767.53 511.998l-207.059-207.044c-13.995-14.002-33.003-19.847-51.246-17.65-18.228-2.204-37.252 3.649-51.246 17.643l-207.059 207.051c-24.196 24.196-24.196 63.42 0 87.609 24.196 24.196 63.427 24.196 87.616 0l170.688-170.681 170.681 170.681c24.203 24.196 63.427 24.196 87.624 0 24.189-24.182 24.189-63.42 0-87.609z" /></g></svg>Pocket</a>
+<a class="feedly" href="http://cloud.feedly.com/#subscription%2Ffeed%2Fhttps://odekakeshimasyo.me/salesforce-apex-customsetting.html" target="_blank"><svg viewBox="0 0 1024 1024" width="1em" height="1em"><g transform="matrix(1 0 0 -1 0 960)"><path d="M977.883 426.441l-425.662 425.634c-22.209 22.224 -58.233 22.224 -80.435 0l-425.662 -425.634c-22.209 -22.238 -22.224 -58.254 0 -80.464l318.719 -318.712h294.314l318.712 318.712c22.224 22.231 22.224 58.225 0.014 80.464zM269.626 337.365l-47.374 47.366 c-3.295 3.302 -3.295 8.655 0 11.957l281.027 281.042c3.316 3.302 8.67 3.302 11.986 0l63.247 -63.283c3.287 -3.302 3.287 -8.641 0 -11.95l-265.14 -265.132h-43.747zM581.258 161.207l-47.388 -47.366h-43.747l-47.374 47.366c-3.295 3.302 -3.295 8.648 0 11.95 l63.268 63.276c3.302 3.316 8.655 3.316 11.979 0l63.261 -63.276c3.287 -3.302 3.287 -8.641 0 -11.95h0.001zM581.937 384.023l-157.618 -157.604h-43.747l-47.374 47.366c-3.295 3.295 -3.295 8.648 0 11.95l173.513 173.521c3.302 3.309 8.655 3.309 11.972 0 l63.261 -63.276c3.28 -3.302 3.28 -8.641 -0.007 -11.957z" /></g></svg>Feedly</a>
+</aside>
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3201872227338418"
+     data-ad-slot="4773689282"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- odekakeshimasyo.me 広告2 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3201872227338418"
+     data-ad-slot="6174540483"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+<aside>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-59619797-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</aside>
+
+</body>
+</html>
