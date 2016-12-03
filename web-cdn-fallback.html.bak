@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="alternate" hreflang="ja" href="https://odekakeshimasyo.io/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<title>CDNダウン時のjs/cssのフォールバック | odekakeshimasyo.io</title>
+<!--[if lt IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div class="container">
+<div class="index"><a href="/">> Index</a></div>
+<h1 id="cdnダウン時のjscssのフォールバック">CDNダウン時のjs/cssのフォールバック</h1>
+
+<h2 id="javascriptのフォールバック">Javascriptのフォールバック</h2>
+
+<p>jqueryは調べればたくさん出てくる。</p>
+
+
+
+<pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">script</span>&gt;</span><span class="javascript">window.jQuery || document.write(<span class="hljs-string">'&lt;script src="./jquery.min.js"&gt;&lt;\/script&gt;'</span>);</span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></code></pre>
+
+<p><br>
+他のライブラリも同様の方法で出来る。</p>
+
+
+
+<pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">script</span>&gt;</span><span class="javascript">window.hljs || document.write(<span class="hljs-string">'&lt;script src="/highlight.min.js"&gt;&lt;\/script&gt;'</span>);</span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></code></pre>
+
+
+
+<h2 id="cssのフォールバック-方法1">CSSのフォールバック 方法1</h2>
+
+<p>linkタグでonloadを使う。 <br>
+ダウンロード出来ればonloadが実行される。失敗すればonloadは実行されない。</p>
+
+
+
+<pre class="prettyprint"><code class="language-html hljs "><span class="hljs-tag">&lt;<span class="hljs-title">link</span> <span class="hljs-attribute">rel</span>=<span class="hljs-value">"stylesheet"</span> <span class="hljs-attribute">onload</span>=<span class="hljs-value">"window.hljscss = 1;"</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/docco.min.css"</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">script</span>&gt;</span><span class="javascript">window.hljscss || document.write(<span class="hljs-string">'&lt;link rel="stylesheet" href="/highlight.docco.min.css" \/&gt;'</span>);</span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></code></pre>
+
+<p>ちなみに他にもbody, script, style, embed, img, frame, iframe, framesetは、onloadが実行される。 <br>
+古いブラウザでは実行されないのもある。</p>
+
+
+
+<h2 id="cssのフォールバック-方法2">CSSのフォールバック 方法2</h2>
+
+<p>関数を自作する。</p>
+
+
+
+<pre class="prettyprint"><code class="language-js hljs ">&lt;script&gt;
+(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($)</span> {</span>
+    $(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">if</span> ($(<span class="hljs-string">'body'</span>).css(<span class="hljs-string">'color'</span>) !== <span class="hljs-string">'#eee'</span>) {
+            $(<span class="hljs-string">'head'</span>).prepend(<span class="hljs-string">'&lt;link rel="text/stylesheet" href="/css/highlight.js.docco.min.css"&gt;'</span>);
+        }
+    });
+})(window.jQuery);
+<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></span></code></pre>
+
+<p>以下のは<a href="http://stackoverflow.com/questions/7383163/how-to-fallback-to-local-stylesheet-not-script-if-cdn-fails">StackOverflow</a>に書いてたもの。</p>
+
+
+
+<pre class="prettyprint"><code class="language-js hljs ">&lt;script type=<span class="hljs-string">"text/javascript"</span>&gt;
+$.each(document.styleSheets, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(i,sheet)</span>{</span>
+    <span class="hljs-keyword">if</span>(sheet.href==<span class="hljs-string">'http://code.jquery.com/mobile/1.0b3/jquery.mobile-1.0b3.min.css'</span>) {
+        <span class="hljs-keyword">var</span> rules = sheet.rules ? sheet.rules : sheet.cssRules;
+        <span class="hljs-keyword">if</span> (rules.length == <span class="hljs-number">0</span>) {
+            $(<span class="hljs-string">'&lt;link rel="stylesheet" type="text/css" href="path/to/local/jquery.mobile-1.0b3.min.css" /&gt;'</span>).appendTo(<span class="hljs-string">'head'</span>);
+        }
+    }
+});
+<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span></span></code></pre>
+
+
+
+<h2 id="cssのフォールバック-方法3">CSSのフォールバック 方法3</h2>
+
+<p>こういうのを使う。 <br>
+<a href="http://fallback.io/">http://fallback.io/</a> <br>
+<a href="http://yepnopejs.com/">http://yepnopejs.com/</a></p>
+</div>
+
+
+<aside class="ad">
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="4773689282"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-3201872227338418"
+data-ad-slot="6174540483"
+data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</aside>
+
+
+<aside>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-59619797-1', 'auto');
+ga('send', 'pageview');
+</script>
+</aside>
+
+
+</body>
+</html>
