@@ -39,7 +39,27 @@
 
         embedded_svc.settings.loadingText = 'ローディング..'; //(読み込み中にデフォルト設定)
         //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(リリースのドメインを設定して、訪問者がチャットセッション中にサブドメインを移動できるようにします)
-
+        
+        /*** ***/
+        embedded_svc.settings.extraPrechatInfo = [{
+          "entityFieldMaps": [{
+              "doCreate": false,
+              "doFind": true,
+              "fieldName": "LastName",
+              "isExactMatch": true,
+              "label": "Last Name"
+            }, {
+              "doCreate": false,
+              "doFind": true,
+              "fieldName": "Email",
+              "isExactMatch": true,
+              "label": "Email"
+            }],
+            "entityName": "Contact"
+          }];
+        /*** ***/
+        
+        
         // Live Agent の設定
         //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
             // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
