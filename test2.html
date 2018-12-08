@@ -6,7 +6,7 @@
 </head>
 <body>
   <h1>Live Agent サンプル</h1>
-  <input type="button" oncick="alert(111);" value="start"></input>
+  <input type="button" id="start" value="start"></input>
 
 <!-- スナップインのタグ #75C1A2 -->
 <style type='text/css'>
@@ -156,7 +156,11 @@
     } else {
         initESW('https://service.force.com');
     }
-  
+    
+    $(window).load(function(){
+      alert(99)
+    });
+    
     function onChatStarted() {
       //alert($('.helpButton .uiButton.helpButtonEnabled').size());
       alert(1);
