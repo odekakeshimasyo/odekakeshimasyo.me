@@ -1,11 +1,12 @@
 <html>
 <head>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <!-- スナップインのタグ -->
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"></meta>
 </head>
 <body>
   <h1>Live Agent サンプル</h1>
-
+  <input type="button" oncick="">start</input>
 
 <!-- スナップインのタグ #75C1A2 -->
 <style type='text/css'>
@@ -125,7 +126,9 @@
 
         embedded_svc.settings.enabledFeatures = ['LiveAgent'];
         embedded_svc.settings.entryFeature = 'LiveAgent';
-
+        
+        // embedded_svc.settings.externalStyles = [];
+      
         embedded_svc.init(
             'https://cs5.salesforce.com',
             'https://dev05-sbj-community-dev05.cs5.force.com/test2',
@@ -152,6 +155,11 @@
         document.body.appendChild(s);
     } else {
         initESW('https://service.force.com');
+    }
+  
+    function onChatStarted() {
+      alert($('.helpButton .uiButton.helpButtonEnabled').size());
+      
     }
 </script>
 
