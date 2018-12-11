@@ -12,8 +12,7 @@
   crossorigin="anonymous"></script>
 <script>
 function testXhr() {
-  alert(99);
-  return;
+  //return;
   $.ajax({
     type: "POST",
     url: "some.php",
@@ -21,6 +20,7 @@ function testXhr() {
   .done(function( msg ) {
       alert( "データ保存: " + msg );
     });
+  alert(99);
 }
 </script>
 
