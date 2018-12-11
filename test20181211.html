@@ -13,11 +13,19 @@
 <script>
 function xhr() {
   alert(99);
+  return;
+  $.ajax({
+    type: "POST",
+    url: "some.php",
+    data: {}})
+  .done(function( msg ) {
+      alert( "データ保存: " + msg );
+    });
 }
 </script>
 
 </head>
 <body>
-  <input type="button" click="XHR();" value="test" name="test"></input>
+  <input type="button" onclick="XHR();" value="test" name="test"></input>
 </body>
 </html>
