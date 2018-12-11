@@ -20,6 +20,10 @@ function testXhr() {
   .done(function( msg ) {
       alert(11);
       alert( msg );
+    })
+  .fail(function( msg ) {
+      alert(22);
+      alert( msg );
     });
   alert(99);
 }
