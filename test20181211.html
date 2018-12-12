@@ -1,16 +1,14 @@
 <html>
 <head>
-<script>
-  window.onload = function() {
-    window.opener.location.href = 'https://google.com';
-  };
-  
-</script>
 <script
   src="https://code.jquery.com/jquery-2.2.4.min.js"
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
 <script>
+
+function testNoopener() {
+  window.opener.location.href = 'https://google.com';
+}
 function testXhr() {
   //return;
   $.ajax({
@@ -31,6 +29,7 @@ function testXhr() {
 
 </head>
 <body>
-  <input type="button" onclick="testXhr();" value="test" name="test"></input>
+  <input type="button" onclick="testNoopener();" value="testNoopener" name="testNoopener"></input>
+  <input type="button" onclick="testXhr();" value="testXhr" name="testXhr"></input>
 </body>
 </html>
