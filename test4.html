@@ -57,8 +57,8 @@ embedded_svc.settings.extraPrechatFormDetails = [{
   "value": "One",
   "displayToAgent": true
 }, {
-  "label": "issue",
-  "value": "Overriding 1234",
+  "label": "CaseOwnerId",
+  "value": "00GO0000004zC1jMAE",
   "displayToAgent": true
 }];
 
@@ -68,23 +68,17 @@ embedded_svc.settings.extraPrechatInfo = [{
   "linkToEntityName": "Case",
   "linkToEntityField": "ContactId",
   "saveToTranscript": "ContactId",
-  "entityFieldMaps": [{
-    "isExactMatch": true,
-    "fieldName": "FirstName",
-    "doCreate": true,
-    "doFind": true,
-    "label": "First Name"
-  }]
+  "entityFieldMaps": []
 }, {
   "entityName": "Case",
   "showOnCreate": true,
   "saveToTranscript": "CaseId",
   "entityFieldMaps": [{
     "isExactMatch": false,
-    "fieldName": "Subject",
+    "fieldName": "OwnerId",
     "doCreate": true,
     "doFind": false,
-    "label": "issue"
+    "label": "CaseOwnerId"
   }]
 }];
 		embedded_svc.init(
