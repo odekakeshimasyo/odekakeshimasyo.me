@@ -30,29 +30,14 @@ test
 <script src="https://service.force.com/embeddedservice/5.0/esw.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     var initESW = function(gslbBaseURL) {
-        embedded_svc.settings.displayHelpButton = true; //または false
-        embedded_svc.settings.language = ''; //たとえば、「en」または「en-US」を入力します
+        embedded_svc.settings.displayHelpButton = true; 
+        embedded_svc.settings.language = ''; 
 
         embedded_svc.settings.avatarImgURL = 'https://dev07-starbuckscoffeejapan2.cs31.force.com/chat/resource/starbucks_logo';
         embedded_svc.settings.waitingStateBackgroundImgURL = 'https://dev07-starbuckscoffeejapan2.cs31.force.com/chat/resource/starbucks_logo';
 
         embedded_svc.settings.defaultMinimizedText = 'チャット受付中';
         embedded_svc.settings.disabledMinimizedText = 'チャット受付停止';
-
-        //embedded_svc.settings.defaultMinimizedText = '...'; //(エキスパートとチャットにデフォルト設定)
-        //embedded_svc.settings.disabledMinimizedText = '...'; //(エージェントがオフラインにデフォルト設定)
-
-        //embedded_svc.settings.loadingText = ''; //(読み込み中にデフォルト設定)
-        //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(リリースのドメインを設定して、訪問者がチャットセッション中にサブドメインを移動できるようにします)
-
-        // Live Agent の設定
-        //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
-            // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
-            // Returns a valid button ID.
-        //};
-        //embedded_svc.settings.prepopulatedPrechatFields = {}; //事前チャットフォームの項目の自動入力を設定
-        //embedded_svc.settings.fallbackRouting = []; //ボタン ID、ユーザ ID、または userId_buttonId の配列
-        //embedded_svc.settings.offlineSupportMinimizedText = '...'; //(デフォルトは [Salesforce に問い合わせる])
 
         embedded_svc.settings.enabledFeatures = ['LiveAgent'];
         embedded_svc.settings.entryFeature = 'LiveAgent';
