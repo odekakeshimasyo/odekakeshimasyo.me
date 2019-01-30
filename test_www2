@@ -1,0 +1,9 @@
+<html>
+<body>
+
+<link media="all" rel="stylesheet" href="https://dev07-starbuckscoffeejapan2.cs31.force.com/chat/resource/chat/common/css/chat.css" type="text/css" />
+<script src="https://service.force.com/embeddedservice/5.0/esw.min.js" charset="UTF-8"></script>
+<script src="https://dev07-starbuckscoffeejapan2.cs31.force.com/chat/resource/chat/common/js/chat.js" charset="UTF-8"></script>
+
+</body>
+</html>
